@@ -7,6 +7,7 @@ using System.Web;
 using System.Data.Entity;
 using GoaGaraget.DataAccessLayer;
 
+
 namespace GoaGaraget.Models
 {
     public class ValidateUniqueRegistrationNumber : ValidationAttribute
@@ -64,8 +65,9 @@ namespace GoaGaraget.Models
         [Required(ErrorMessage = "Date is required")]
         public DateTime CheckinDate { get; set; }
 
-        //public int ParkingSpaceId { get; set; }
-        //public virtual ParkingSpace ParkingSpace { get; set; }
+        public int MemberId { get; set; }
+        public virtual Member Member { get; set; }
+
         public virtual ICollection<ParkingSpace> ParkingSpaces { get; set; }
         
 

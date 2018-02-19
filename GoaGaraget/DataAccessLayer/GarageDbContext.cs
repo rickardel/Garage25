@@ -13,5 +13,7 @@ namespace GoaGaraget.DataAccessLayer
         //public DbSet<Models.ParkingModel> ParkingModels { get; set; }
         public DbSet<Models.Receipt> Receipts { get; set; }
         public DbSet<Models.Garage> Garages { get; set; }
+
+        public System.Data.Entity.DbSet<GoaGaraget.Models.Member> Members { get; set; }
     }
 }
