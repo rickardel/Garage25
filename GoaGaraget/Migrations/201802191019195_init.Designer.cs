@@ -13,7 +13,7 @@ namespace GoaGaraget.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201802161459322_init"; }
+            get { return "201802191019195_init"; }
         }
         
         string IMigrationMetadata.Source
