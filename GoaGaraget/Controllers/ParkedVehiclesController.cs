@@ -115,8 +115,14 @@ namespace GoaGaraget.Controllers
         public ActionResult Create()
         {
             Functionalities.DoIt doIt = new Functionalities.DoIt();
+            //ViewBag.MemberId = new SelectList(db.Members, "Id", "PersonNumber");
+            //ViewBag.VehicleTypeId = new SelectList(db.VehicleTypes, "Id", "Name");
 
-            return View();
+            ParkedVehicleViewModel pvvm = new ParkedVehicleViewModel();
+            pvvm.Members = new SelectList(db.Members.ToList(), "Id", "PersonNumber");
+            pvvm.VehicleTypes = new SelectList(db.VehicleTypes.ToList(), "Id", "Name");
+
+            return View(pvvm);
         }
 
         // POST: ParkedVehicles/Create
@@ -124,17 +130,23 @@ namespace GoaGaraget.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,RegNumber,Size,Color,Type,Brand,NumberOfWheels")] ParkedVehicle parkedVehicle)
+        public ActionResult Create([Bind(Include = "MemberId,RegNumber,Color,VehicleTypeId,Brand,NumberOfWheels")] ParkedVehicleViewModel pvvm)
         {
+            VehicleType vt = db.VehicleTypes.Single(v => v.Id == pvvm.VehicleTypeId);
+            ParkedVehicle parkedVehicle = new ParkedVehicle(pvvm.MemberId, pvvm.RegNumber, pvvm.Color, vt, pvvm.Brand, pvvm.NumberOfWheels, DateTime.Now);
+            parkedVehicle.Member = db.Members.Single(m => m.Id == pvvm.MemberId);
+            parkedVehicle.VehicleType = vt;
+
             if (ModelState.IsValid)
             {
-                parkedVehicle.CheckinDate = DateTime.Now;
+                parkedVehicle.Size = parkedVehicle.VehicleType.Size;
                 db.ParkedVehicles.Add(parkedVehicle);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            return View(parkedVehicle);
+            pvvm.Members = new SelectList(db.Members.ToList(), "Id", "PersonNumber");
+            pvvm.VehicleTypes = new SelectList(db.VehicleTypes.ToList(), "Id", "Name");
+            return View(pvvm);
         }
 
 
