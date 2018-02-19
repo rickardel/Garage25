@@ -76,8 +76,13 @@ namespace GoaGaraget.Controllers
 
                 if (parkedVehicle != null)
                 {
-                    return View(pm);
+                    if (pm.AvailableParkingSpaces.Count > 0)
+                        return View(pm);
+                    else
+                        return RedirectToActionPermanent("ParkingFull", "Home");
                 }
+
+                
             }
             return View("Index");
         }

@@ -26,5 +26,12 @@ namespace GoaGaraget.Controllers
 
             return View();
         }
+
+        public ActionResult ParkingFull()
+        {
+            ViewBag.Message = "Sorry, Parking cannot currently fit this vehicle.";
+
+            return View();
+        }
     }
 }
