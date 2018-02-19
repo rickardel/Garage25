@@ -8,6 +8,19 @@ namespace GoaGaraget.Models
 {
     public class Member
     {
+        public Member()
+        {
+
+        }
+        public Member(int id, string firstName, string lastName, int pin, string personNumber)
+        {
+            this.Id = id;
+            this.FirstName = firstName;
+            this.SurName = lastName;
+            this.Pin = pin;
+            this.PersonNumber = personNumber;
+        }
+
         [Required]
         public int Id { get; set; }
         [Required(ErrorMessage = "Please enter First name")]
