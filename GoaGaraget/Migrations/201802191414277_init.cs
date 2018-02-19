@@ -47,7 +47,7 @@ namespace GoaGaraget.Migrations
                         RegNumber = c.String(nullable: false),
                         Size = c.Int(nullable: false),
                         Color = c.String(nullable: false),
-                        Type = c.Int(nullable: false),
+                        VehicleTypeId = c.Int(nullable: false),
                         Brand = c.String(nullable: false, maxLength: 30),
                         NumberOfWheels = c.Int(nullable: false),
                         CheckinDate = c.DateTime(nullable: false),
@@ -55,6 +55,8 @@ namespace GoaGaraget.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Members", t => t.MemberId, cascadeDelete: true)
+                .ForeignKey("dbo.VehicleTypes", t => t.VehicleTypeId, cascadeDelete: true)
+                .Index(t => t.VehicleTypeId)
                 .Index(t => t.MemberId);
             
             CreateTable(
@@ -66,6 +68,16 @@ namespace GoaGaraget.Migrations
                         SurName = c.String(nullable: false),
                         Pin = c.Int(nullable: false),
                         PersonNumber = c.String(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.VehicleTypes",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(nullable: false),
+                        Size = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -102,6 +114,7 @@ namespace GoaGaraget.Migrations
         {
             DropForeignKey("dbo.Receipts", "ParkedVehicleId", "dbo.ParkedVehicles");
             DropForeignKey("dbo.ParkingSpaces", "ParkingSpace_Id", "dbo.ParkingSpaces");
+            DropForeignKey("dbo.ParkedVehicles", "VehicleTypeId", "dbo.VehicleTypes");
             DropForeignKey("dbo.ParkedVehicleParkingSpaces", "ParkingSpace_Id", "dbo.ParkingSpaces");
             DropForeignKey("dbo.ParkedVehicleParkingSpaces", "ParkedVehicle_Id", "dbo.ParkedVehicles");
             DropForeignKey("dbo.ParkedVehicles", "MemberId", "dbo.Members");
@@ -110,10 +123,12 @@ namespace GoaGaraget.Migrations
             DropIndex("dbo.ParkedVehicleParkingSpaces", new[] { "ParkedVehicle_Id" });
             DropIndex("dbo.Receipts", new[] { "ParkedVehicleId" });
             DropIndex("dbo.ParkedVehicles", new[] { "MemberId" });
+            DropIndex("dbo.ParkedVehicles", new[] { "VehicleTypeId" });
             DropIndex("dbo.ParkingSpaces", new[] { "ParkingSpace_Id" });
             DropIndex("dbo.ParkingSpaces", new[] { "GarageId" });
             DropTable("dbo.ParkedVehicleParkingSpaces");
             DropTable("dbo.Receipts");
+            DropTable("dbo.VehicleTypes");
             DropTable("dbo.Members");
             DropTable("dbo.ParkedVehicles");
             DropTable("dbo.ParkingSpaces");

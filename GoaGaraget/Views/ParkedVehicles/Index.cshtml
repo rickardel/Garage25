@@ -15,13 +15,17 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.Member)
+        </th>
+
+        <th>
             @Html.DisplayNameFor(model => model.RegNumber)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Size)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Type)
+            @Html.DisplayNameFor(model => model.VehicleType)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.NumberOfWheels)
@@ -35,6 +39,10 @@
     @foreach (var item in Model)
     {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member.FirstName)
+                @Html.DisplayFor(modelItem => item.Member.SurName)
+            </td>
             <td>
                 <div class="btn-group">
                     @{
@@ -76,7 +84,7 @@
                 </div>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Type)
+                @Html.DisplayFor(modelItem => item.VehicleType.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NumberOfWheels)
