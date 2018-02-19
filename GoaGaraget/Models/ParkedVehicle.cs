@@ -6,7 +6,6 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using GoaGaraget.DataAccessLayer;
-using Humanizer;
 
 namespace GoaGaraget.Models
 {
