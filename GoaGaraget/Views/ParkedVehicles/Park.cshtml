@@ -1,0 +1,105 @@
+﻿@model GoaGaraget.Models.ParkingModel
+
+@{
+    ViewBag.Title = "View";
+}
+
+<h2>View</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>ParkingModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.ParkedVehicleId, "ParkedVehicleId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                These are the available parking spaces fitting vehicle
+                @Model.ParkedVehicle.RegNumber
+                (
+                @Model.ParkedVehicle.Size
+                )
+                @Html.HiddenFor(model => model.ParkedVehicleId)
+                @*@Html.DropDownList("ParkedVehicleId", null, htmlAttributes: new { @class = "form-control" })*@
+                @*@Html.ValidationMessageFor(model => model.ParkedVehicleId, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ParkingSpaceId, "ParkingSpaceId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @*@Html.HiddenFor(model => model.ParkingSpaceId)*@
+                @Html.ValidationMessageFor(model => model.ParkingSpaceId, "", new { @class = "text-danger" })
+                @Html.DropDownList("ParkingSpaceId", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Park" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div id="parkingSpaceList" class="btn-group">
+    @foreach (var item in Model.AvailableParkingSpaces)
+    { 
+        <button class="btn btn-primary btn-xs" Id=@item.Id>
+            @*@for (int i = 0; i < Model.ParkedVehicle.Size; i++)
+                {*@
+            @(item.Id)
+            @*  }*@
+        </button>
+    }
+</div>
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+    //var i = 0;
+    //$("#3")
+    //    .mouseover(function () {
+    //        $(this).text("love");
+    //    })
+    //    .mouseout(function () {
+    //        $(this).find("#3").text("mouse out ");
+    //    });
+
+    //var n = 0;
+    //$("#parkingSpaceList")
+    //    .mouseenter(function () {
+    //        $(this).find("5").text("mouse enter x ");
+    //    })
+    //    .mouseleave(function () {
+    //        $(this).find("5").text("mouse leave");
+    //    });
+</script>
+    <script>
+                        //// Get the container element
+                        //var btnContainer = document.getElementById("parkingSpaceList");
+
+                        //// Get all buttons with class="btn" inside the container
+                        //var btns = btnContainer.getElementsByClassName("btn");
+
+                        //// Loop through the buttons and add the active class to the current/clicked button
+                        //for (var i = 0; i < btns.length; i++) {
+                        //    btns[i].addEventListener("click", function () {
+                        //        var current = document.getElementsByClassName("active");
+                        //        current[0].className = current[0].className.replace(" active", "");
+                        //        this.className += " active";
+                        //    });
+                        //}
+
+    </script>
+}

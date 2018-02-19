@@ -1,0 +1,67 @@
+﻿@section Styles{
+    <link href="https://fonts.googleapis.com/css?family=Faster+One" rel="stylesheet">
+}
+@{
+    ViewBag.Title = "Home Page";
+}
+@section Stats{
+    @Html.Action("Statistics", "ParkedVehicles")
+}
+
+
+<div class="jumbotron text-center gl" style="background-image:url('../../Content/goaGarageIntroBackground.jpg')" ;
+     background-size: cover">
+
+    <div class="text-block" style="border:solid 5px white; padding:10px;width:500px;bottom: 20px;right: 20px;background-color: rgba(78, 78, 78, 0.8);color: white;padding-left: 20px;padding-right: 20px;">
+        <h1 style="font-family: 'Faster One', cursive;">goaGarage</h1>
+        <p class="lead">Worlds most Goa Garage</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Member Register</h2>
+        <p>
+            Register in member register.
+        </p>
+        <p>
+            <div class="btn-group">
+                @Html.ActionLink(" Manage", "Index", "ParkedVehicles", new { }, new { @class = "btn btn-primary btn-lg " })
+                <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink(" Register", "Create", "ParkedVehicles")</li>
+                    @*<li>@Html.ActionLink(" Remove", "Remove", "ParkedVehicles")</li> TODO - Interface for search regNumber and delete*@
+                </ul>
+            </div>
+
+            <div class=".btn-group-vertical">
+
+
+
+            </div>
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>Goa Garage</h2>
+        <p>Park vehicle from register.</p>
+        <p>
+            <div class="btn-group">
+                @Html.ActionLink(" Park", "Park", "ParkedVehicles", new { }, new { @class = "btn btn-success btn-lg" })
+                @Html.ActionLink(" Checkout", "Checkout", "ParkedVehicles", new { }, new { @class = "btn btn-warning btn-lg" })
+            </div>
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>Statistics</h2>
+        <p>
+            See whats happening in the garage.
+        </p>
+        <p>
+            <div class="btn-group">
+                @Html.ActionLink(" More..", "Statistics", "ParkedVehicles", new { }, new { @class = "btn btn-info btn-lg glyphicon glyphicon-globe" })
+            </div>
+        </p>
+    </div>
+</div>

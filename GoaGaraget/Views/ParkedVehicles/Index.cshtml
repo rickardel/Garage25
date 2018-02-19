@@ -1,0 +1,115 @@
+﻿@model IEnumerable<GoaGaraget.Models.ParkedVehicle>
+
+@{
+    ViewBag.Title = "Index";
+}
+@section Stats{
+    @Html.Action("Statistics", "ParkedVehicles")
+}
+
+<h2>Vehicle Register</h2>
+
+<p>
+    @Html.ActionLink("Register vehicle", "Create", new { }, new { @class = "btn btn-primary btn-lg" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RegNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Size)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfWheels)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CheckinDate)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <div class="btn-group">
+                    @{
+                        if (item.ParkingSpaces.Count > 0)
+                        {
+                            @Html.ActionLink("Checkout", "Checkout", new { id = item.Id }, new { @class = "btn btn-warning btn-xs" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Park", "Park", new { id = item.Id }, new { @class = "btn btn-success btn-xs" })
+                        }
+                    }
+                </div>
+                @Html.DisplayFor(modelItem => item.RegNumber)
+
+            </td>
+            <td>
+                <div class="btn-group">
+                    @{
+                        if (item.ParkingSpaces.Count > 0)
+                        {
+
+                            foreach (var ps in item.ParkingSpaces)
+                            {
+                                @Html.ActionLink(ps.Id.ToString(), "Details", "ParkingSpaces", new { id = ps.Id }, new { @class = "btn btn-success btn-xs" })
+                            }
+
+                        }
+                        else
+                        {
+
+                            for (int i = 0; i < @item.Size; i++)
+                            {
+                                <button class="btn btn-xs">|</button>
+                            }
+                        }
+
+                    }
+                </div>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfWheels)
+            </td>
+            <td>
+                @item.CheckinDate.ToString("")
+            </td>
+            <td>
+
+                <div class="btn-group">
+
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary btn-xs" })
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                            </li>
+                            <li>
+                                @Html.ActionLink("Stats", "Statistics", new { id = item.Id })
+                            </li>
+                            <li>
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn-danger" })
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>
