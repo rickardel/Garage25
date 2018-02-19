@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoaGaraget.DataAccessLayer;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,6 +7,23 @@ using System.Web;
 
 namespace GoaGaraget.Models
 {
+    public class ValidateUniquePersonNumber : ValidationAttribute
+    {
+        private GarageDbContext _Db = new GarageDbContext();
+        public bool IsRegistered(string persNr)
+        {
+            return _Db.Members.Any<Member>(v => (v.PersonNumber == persNr));
+        }
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            if (IsRegistered((string)value))
+                return new ValidationResult("Member is already in Register");
+            else
+                return ValidationResult.Success;
+        }
+
+    }
+
     public class Member
     {
         public Member()
@@ -21,6 +39,8 @@ namespace GoaGaraget.Models
             this.PersonNumber = personNumber;
         }
 
+
+
         [Required]
         public int Id { get; set; }
         [Required(ErrorMessage = "Please enter First name")]
@@ -29,6 +49,8 @@ namespace GoaGaraget.Models
         public string SurName { get; set; }
         public int Pin { get; set; }
         [Required(ErrorMessage = "Please enter person number")]
+        [ValidateUniquePersonNumber]
+        [RegularExpression(@"[0-9]{1,6}-[0-9]{1,4}", ErrorMessage = "Please use correct format YYMMDD-SSSS")]
         public string PersonNumber { get; set; }
 
         public ICollection<ParkedVehicle> ParkedVehicles { get; set; }

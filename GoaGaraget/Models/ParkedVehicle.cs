@@ -28,7 +28,7 @@ namespace GoaGaraget.Models
     }
 
 
-    public enum VehicleType { Car, Truck, Lorry, Motorcycle, Boat, Airplane }
+    //public enum VehicleType { Car, Truck, Lorry, Motorcycle, Boat, Airplane }
     public class ParkedVehicle
     {
         [Required(ErrorMessage = "Id is required")]
@@ -51,7 +51,8 @@ namespace GoaGaraget.Models
 
         [DisplayName("Vehicle type")]
         [Required(ErrorMessage = "Please select a type")]
-        public VehicleType Type { get; set; }
+        public int VehicleTypeId { get; set; }
+        public virtual VehicleType VehicleType { get; set; }
 
         [DisplayName("Vehicle brand")]
         [Required(ErrorMessage = "Please specify brand")]
@@ -75,13 +76,13 @@ namespace GoaGaraget.Models
         {
             this.ParkingSpaces = new List<ParkingSpace>();
         }
-        public ParkedVehicle(int memberId, string regNr, int size, string color, VehicleType vehicleType, string brand, int numberOfWheels, DateTime checkinDate)
+        public ParkedVehicle(int memberId, string regNr, string color, VehicleType vehicleType, string brand, int numberOfWheels, DateTime checkinDate)
         {
             this.MemberId = memberId;
             this.RegNumber = regNr;
-            this.Size = size;
+            this.Size = vehicleType.Size;
             this.Color = color;
-            this.Type = vehicleType;
+            this.VehicleType = vehicleType;
             this.Brand = brand;
             this.NumberOfWheels = numberOfWheels;
             this.CheckinDate = checkinDate;
