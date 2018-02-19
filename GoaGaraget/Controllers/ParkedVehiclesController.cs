@@ -19,6 +19,11 @@ namespace GoaGaraget.Controllers
         {
             return View(db.ParkedVehicles.ToList());
         }
+        public ActionResult SimpleIndex()
+        {
+            List<ParkedVehicleListModel> pvlm = new ParkedVehiclesListModel().Simplify(db.ParkedVehicles.ToList());
+            return View(pvlm);
+        }
 
         // GET: ParkedVehicles/Details/5
         public ActionResult Details(int? id)
