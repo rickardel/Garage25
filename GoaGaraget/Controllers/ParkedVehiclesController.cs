@@ -143,7 +143,7 @@ namespace GoaGaraget.Controllers
         public ActionResult Create([Bind(Include = "MemberId,RegNumber,Color,VehicleTypeId,Brand,NumberOfWheels")] ParkedVehicleViewModel pvvm)
         {
             VehicleType vt = db.VehicleTypes.Single(v => v.Id == pvvm.VehicleTypeId);
-            ParkedVehicle parkedVehicle = new ParkedVehicle(pvvm.MemberId, pvvm.RegNumber, pvvm.Color, vt, pvvm.Brand, pvvm.NumberOfWheels, DateTime.Now);
+            ParkedVehicle parkedVehicle = new ParkedVehicle(pvvm.Member, pvvm.RegNumber, pvvm.Color, vt, pvvm.Brand, pvvm.NumberOfWheels, DateTime.Now);
             parkedVehicle.Member = db.Members.Single(m => m.Id == pvvm.MemberId);
             parkedVehicle.VehicleType = vt;
 

@@ -76,9 +76,9 @@ namespace GoaGaraget.Models
         {
             this.ParkingSpaces = new List<ParkingSpace>();
         }
-        public ParkedVehicle(int memberId, string regNr, string color, VehicleType vehicleType, string brand, int numberOfWheels, DateTime checkinDate)
+        public ParkedVehicle(Member member, string regNr, string color, VehicleType vehicleType, string brand, int numberOfWheels, DateTime checkinDate)
         {
-            this.MemberId = memberId;
+            this.Member = member;
             this.RegNumber = regNr;
             this.Size = vehicleType.Size;
             this.Color = color;
