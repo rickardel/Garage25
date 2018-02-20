@@ -1,0 +1,50 @@
+﻿@model GoaGaraget.Models.Receipt
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Receipt</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ParkedVehicle.RegNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ParkedVehicle.RegNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckinAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckinAt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckoutAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckoutAt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cost)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

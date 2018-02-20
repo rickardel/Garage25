@@ -26,14 +26,13 @@
         </p>
         <p>
             <div class="btn-group">
-                @Html.ActionLink(" Manage", "Index", "ParkedVehicles", new { }, new { @class = "btn btn-primary btn-lg " })
+                @Html.ActionLink(" List Members", "Index", "Members", new { }, new { @class = "btn btn-primary btn-lg " })
                 <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li>@Html.ActionLink(" Register", "Create", "ParkedVehicles")</li>
-                    @*<li>@Html.ActionLink(" Remove", "Remove", "ParkedVehicles")</li> TODO - Interface for search regNumber and delete*@
-                </ul>
+                    <li>@Html.ActionLink(" Register", "Create", "Members")</li>
+               </ul>
             </div>
 
             <div class=".btn-group-vertical">
@@ -48,9 +47,27 @@
         <p>Park vehicle from register.</p>
         <p>
             <div class="btn-group">
-                @Html.ActionLink(" Park", "Park", "ParkedVehicles", new { }, new { @class = "btn btn-success btn-lg" })
-                @Html.ActionLink(" Checkout", "Checkout", "ParkedVehicles", new { }, new { @class = "btn btn-warning btn-lg" })
+                @Html.ActionLink(" List Vehicles", "SimpleIndex", "ParkedVehicles", new { }, new { @class = "btn btn-primary btn-lg " })
+                <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink(" Detailed List", "Index", "ParkedVehicles")</li>
+                    <li>@Html.ActionLink(" Register Vehicle", "Create", "ParkedVehicles")</li>
+
+                    @*<li>@Html.ActionLink(" Remove", "Remove", "ParkedVehicles")</li> TODO - Interface for search regNumber and delete TODO - Interface for search regNumber and delete*@
+                </ul>
             </div>
+
+            <div class=".btn-group-vertical">
+
+
+
+            </div>
+            @*<div class="btn-group">
+            @Html.ActionLink(" Park", "Park", "ParkedVehicles", new { }, new { @class = "btn btn-success btn-lg" })
+            @Html.ActionLink(" Checkout", "Checkout", "ParkedVehicles", new { }, new { @class = "btn btn-warning btn-lg" })
+        </div>*@
         </p>
     </div>
     <div class="col-md-4">

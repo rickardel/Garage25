@@ -19,6 +19,11 @@ namespace GoaGaraget.Controllers
         {
             return View(db.ParkedVehicles.ToList());
         }
+        public ActionResult SimpleIndex()
+        {
+            List<ParkedVehicleListModel> pvlm = new ParkedVehiclesListModel().Simplify(db.ParkedVehicles.ToList());
+            return View(pvlm);
+        }
 
         // GET: ParkedVehicles/Details/5
         public ActionResult Details(int? id)
@@ -67,7 +72,17 @@ namespace GoaGaraget.Controllers
             {
                 ParkedVehicle parkedVehicle = db.ParkedVehicles.Find(id);
                 ParkingSpace[] parkingSpaces = db.ParkingSpaces.ToArray();
-                ParkingModel pm = new ParkingModel(parkedVehicle, parkingSpaces);
+                ParkingModel pm = new ParkingModel();
+                pm.ParkedVehicle = parkedVehicle;
+                if (parkedVehicle.VehicleType.Id == 2)
+                {
+                    pm.AvailableParkingSpaces = new Functionalities.DoIt().GetAvailableMCParkingSpaces(parkingSpaces);
+
+                }
+                else
+                {
+                    pm.AvailableParkingSpaces = new Functionalities.DoIt().GetAvailableParkingSpaces(parkedVehicle.Size, parkingSpaces);
+                }
                 pm.ParkedVehicleId = (int)id;
                 ViewBag.ParkingSpaceId = new SelectList(pm.AvailableParkingSpaces, "Id", "Id");
                 //ViewBag.ParkedVehicleId = new SelectList(, "Id", "RegNumber", id);
@@ -76,8 +91,13 @@ namespace GoaGaraget.Controllers
 
                 if (parkedVehicle != null)
                 {
-                    return View(pm);
+                    if (pm.AvailableParkingSpaces.Count > 0)
+                        return View(pm);
+                    else
+                        return RedirectToAction("ParkingFull", "Home");
                 }
+
+
             }
             return View("Index");
         }
@@ -93,16 +113,29 @@ namespace GoaGaraget.Controllers
                 ParkingSpace parkingSpace;
                 parkingModel.CreatedAt = DateTime.Now;
                 int i = 0;
-                do
+                if (parkedVehicle.VehicleType.Id == 2)
                 {
-                    parkingSpace = db.ParkingSpaces.Find(parkingModel.ParkingSpaceId + i);
+                    parkingSpace = db.ParkingSpaces.Find(parkingModel.ParkingSpaceId);
                     parkingSpace.IsEmpty = false;
+                    parkingSpace.IsMcParkingSpace = true;
                     parkedVehicle.ParkingSpaces.Add(parkingSpace);
                     db.Entry(parkingSpace).State = EntityState.Modified;
-                    parkingSpace.ParkedVehicles.Add(parkedVehicle);
-                    i++;
-                } while (i < parkedVehicle.Size);
-                parkedVehicle.CheckinDate = DateTime.Now;
+                    //parkingSpace.ParkedVehicles.Add(parkedVehicle);
+                    parkedVehicle.CheckinDate = DateTime.Now;
+                }
+                else
+                {
+                    do
+                    {
+                        parkingSpace = db.ParkingSpaces.Find(parkingModel.ParkingSpaceId + i);
+                        parkingSpace.IsEmpty = false;
+                        parkedVehicle.ParkingSpaces.Add(parkingSpace);
+                        db.Entry(parkingSpace).State = EntityState.Modified;
+                        parkingSpace.ParkedVehicles.Add(parkedVehicle);
+                        i++;
+                    } while (i < parkedVehicle.Size);
+                    parkedVehicle.CheckinDate = DateTime.Now;
+                }
                 db.Entry(parkedVehicle).State = EntityState.Modified;
                 db.Configuration.ValidateOnSaveEnabled = false;
                 db.SaveChanges();
@@ -115,8 +148,14 @@ namespace GoaGaraget.Controllers
         public ActionResult Create()
         {
             Functionalities.DoIt doIt = new Functionalities.DoIt();
+            //ViewBag.MemberId = new SelectList(db.Members, "Id", "PersonNumber");
+            //ViewBag.VehicleTypeId = new SelectList(db.VehicleTypes, "Id", "Name");
 
-            return View();
+            ParkedVehicleViewModel pvvm = new ParkedVehicleViewModel();
+            pvvm.Members = new SelectList(db.Members.ToList(), "Id", "Firstname");
+            pvvm.VehicleTypes = new SelectList(db.VehicleTypes.ToList(), "Id", "Name");
+
+            return View(pvvm);
         }
 
         // POST: ParkedVehicles/Create
@@ -124,17 +163,23 @@ namespace GoaGaraget.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,RegNumber,Size,Color,Type,Brand,NumberOfWheels")] ParkedVehicle parkedVehicle)
+        public ActionResult Create([Bind(Include = "MemberId,RegNumber,Color,VehicleTypeId,Brand,NumberOfWheels")] ParkedVehicleViewModel pvvm)
         {
+            VehicleType vt = db.VehicleTypes.Single(v => v.Id == pvvm.VehicleTypeId);
+            ParkedVehicle parkedVehicle = new ParkedVehicle(pvvm.Member, pvvm.RegNumber, pvvm.Color, vt, pvvm.Brand, pvvm.NumberOfWheels, DateTime.Now);
+            parkedVehicle.Member = db.Members.Single(m => m.Id == pvvm.MemberId);
+            parkedVehicle.VehicleType = vt;
+
             if (ModelState.IsValid)
             {
-                parkedVehicle.CheckinDate = DateTime.Now;
+                parkedVehicle.Size = parkedVehicle.VehicleType.Size;
                 db.ParkedVehicles.Add(parkedVehicle);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            return View(parkedVehicle);
+            pvvm.Members = new SelectList(db.Members.ToList(), "Id", "PersonNumber");
+            pvvm.VehicleTypes = new SelectList(db.VehicleTypes.ToList(), "Id", "Name");
+            return View(pvvm);
         }
 
 
@@ -196,7 +241,11 @@ namespace GoaGaraget.Controllers
             {
                 return HttpNotFound();
             }
-            Receipt receipt = new Receipt(parkedVehicle);
+            Receipt receipt = new Receipt();
+            receipt.ParkedVehicle = parkedVehicle;
+            new Functionalities.Calculate().UpdateReceipt(receipt);
+            ViewBag.visitHours = (receipt.CheckoutAt - receipt.CheckinAt).Hours;
+            ViewBag.visitMinutes = (receipt.CheckoutAt - receipt.CheckinAt).Minutes;
             return View(receipt);
         }
 
@@ -208,25 +257,28 @@ namespace GoaGaraget.Controllers
             //ParkedVehicle parkedVehicle = db.ParkedVehicles.Find(id);
             //db.ParkedVehicles.Remove(parkedVehicle);
             ParkedVehicle parkedVehicle = db.ParkedVehicles.Find(id);
-            Receipt receipt = new Receipt(parkedVehicle);
+            Receipt receipt = new Receipt();
+            receipt.ParkedVehicle = parkedVehicle;
+            new Functionalities.Calculate().UpdateReceipt(receipt);
+
+
             foreach (var ps in parkedVehicle.ParkingSpaces)
             {
-                ps.IsEmpty = true;
-
+                if (ps.ParkedVehicles.Count == 1)
+                {
+                    ps.IsEmpty = true;
+                    ps.IsMcParkingSpace = false;
+                }
                 ps.TotalIncome += receipt.Cost;
-                ps.VisitorCount++ ;
-                ps.AverageTime = 
+                ps.VisitorCount++;
+                ps.AverageTime =
                     TimeSpan.FromMinutes((int)Math
-                    .Round(((ps.AverageTime+(receipt.CheckoutAt-receipt.CheckinAt))
-                    .TotalMinutes)/ps.VisitorCount));
+                    .Round(((ps.AverageTime + (receipt.CheckoutAt - receipt.CheckinAt))
+                    .TotalMinutes) / ps.VisitorCount));
                 //db.Entry(ps).State = EntityState.Modified;
             }
             parkedVehicle.ParkingSpaces.Clear();
             //db.Entry(parkedVehicle).State = EntityState.Modified;
-            receipt.ParkedVehicle = parkedVehicle;
-            receipt.ParkedVehicleId = parkedVehicle.Id;
-            receipt.CheckoutAt = DateTime.Now;
-            receipt.CheckinAt = parkedVehicle.CheckinDate;
             db.Receipts.Add(receipt);
             db.SaveChanges();
             return RedirectToAction("Index");

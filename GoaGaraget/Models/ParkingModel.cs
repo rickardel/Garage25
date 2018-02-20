@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace GoaGaraget.Models
 {
@@ -20,12 +21,6 @@ public int ParkedVehicleId { get; set; }
         public ParkingModel()
         {
 
-        }
-        public ParkingModel(ParkedVehicle parkedVehicle, ParkingSpace[] parkingSpaces)
-        {
-            Functionalities.DoIt doIt = new Functionalities.DoIt();
-            this.AvailableParkingSpaces = doIt.GetAvailableParkingSpaces(parkedVehicle.Size, parkingSpaces);
-            ParkedVehicle = parkedVehicle;
         }
 
         public ParkingModel(ParkedVehicle parkedVehicle)

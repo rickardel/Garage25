@@ -16,14 +16,7 @@ namespace GoaGaraget.Models
         public DateTime CheckinAt { get; set; }
         public DateTime CheckoutAt { get; set; }
         public int Cost { get; set; }
-
-        public Receipt(ParkedVehicle parkedVehicle)
-        {
-            this.ParkedVehicle = parkedVehicle;
-            this.CheckinAt = parkedVehicle.CheckinDate;
-            this.CheckoutAt = DateTime.Now;
-            Cost = 69;
-        }
+        public Receipt(){}
 
     }
 }

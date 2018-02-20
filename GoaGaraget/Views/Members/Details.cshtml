@@ -1,0 +1,68 @@
+﻿@model GoaGaraget.Models.Member
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Member</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        </dt>
+        <dd></dd>
+    </dl>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SurName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SurName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonNumber)
+        </dd>
+    </dl>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.ActionLink("Back to List", "Index", "", new { @class = "btn btn-primary" })
+        </dt>
+        <dd></dd>
+    </dl>
+</div>
+<ul>
+    @foreach (var car in Model.ParkedVehicles) {
+    
+    <li>
+        @Html.ActionLink(@car.Brand +" - " + @car.RegNumber, "details", "ParkedVehicles", new { id = car.Id } , new { @class = "btn btn-primary" })
+    </li>
+
+    }
+</ul>

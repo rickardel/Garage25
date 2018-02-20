@@ -24,6 +24,28 @@ namespace GoaGaraget.Functionalities
             return ps.ParkingSpaces.Where(p => p.IsEmpty == true);
         }
 
+        internal List<ParkingSpace> GetAvailableMCParkingSpaces(ParkingSpace[] parkingSpaces)
+        {
+            var res = new List<ParkingSpace>();
+            int j = 0;
+            ParkingSpace tmp;
+            for (int i = 0; i < parkingSpaces.Length; i++)
+            {
+                tmp = parkingSpaces[i];
+                if (tmp.IsMcParkingSpace) {
+                    if (tmp.ParkedVehicles.Count < tmp.McCountMax) { 
+                        res.Add(tmp);
+                    }
+                }
+            }
+            if (res.Count > 0) { 
+                return res;
+            }
+            else {
+                return GetAvailableParkingSpaces(1, parkingSpaces);
+            }
+        }
+
         internal List<ParkingSpace> GetAvailableParkingSpaces(int size, ParkingSpace[] parkingSpaces)
         {
             var res = new List<ParkingSpace>();
@@ -45,6 +67,7 @@ namespace GoaGaraget.Functionalities
         public void CheckoutParkedVehicle(ParkedVehicle parkedVehicle)
         {
         }
+        
 
         public int GetMaxSpace()
         {
