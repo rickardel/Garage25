@@ -28,10 +28,18 @@ namespace GoaGaraget.Models
 
         public StatisticModel(List<ParkedVehicle> parkedVehicles)
         {
-            this.GarageSize = 169;
-            this.ExpectedIncome = 10000000;
-            this.TotalWheelCount = 169;
-            this.parkedVehicles = parkedVehicles;
+            this.GarageSize = parkedVehicles.Capacity;
+            this.parkedVehicles = parkedVehicles.Where(pv => pv.ParkingSpaces.Count > 0).ToList();
+
+            this.ExpectedIncome = 0;
+            this.TotalWheelCount = 0;
+            DateTime now = DateTime.Now;
+            var actuallyParkedVehicles = parkedVehicles.Where(pv => pv.ParkingSpaces.Count > 0);
+            foreach (var pv in actuallyParkedVehicles)
+            {
+                this.TotalWheelCount += pv.NumberOfWheels;
+                this.ExpectedIncome += (float)(now-pv.CheckinDate).TotalHours*pv.Member.Price;
+            }
         }
     }
 }
