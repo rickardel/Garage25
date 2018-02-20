@@ -61,8 +61,7 @@
     @foreach (var car in Model.ParkedVehicles) {
     
     <li>
-        hej
-        @Html.ActionLink(@car.RegNumber, "ParkVehicleController/Details/" + @car.Id, "", new { @class = "btn btn-primary" })
+        @Html.ActionLink(@car.Brand +" - " + @car.RegNumber, "details", "ParkedVehicles", new { id = car.Id } , new { @class = "btn btn-primary" })
     </li>
 
     }
