@@ -45,6 +45,7 @@ namespace GoaGaraget.Functionalities
         public void CheckoutParkedVehicle(ParkedVehicle parkedVehicle)
         {
         }
+        
 
         public int GetMaxSpace()
         {

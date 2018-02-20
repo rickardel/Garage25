@@ -47,7 +47,7 @@ namespace GoaGaraget.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FirstName,SurName,Pin,PersonNumber")] Member member)
+        public ActionResult Create([Bind(Include = "Id,FirstName,SurName,Pin,Price,PersonNumber")] Member member)
         {
             if (ModelState.IsValid)
             {

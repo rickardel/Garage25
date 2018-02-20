@@ -29,12 +29,13 @@ namespace GoaGaraget.Models
         {
 
         }
-        public Member(int id, string firstName, string lastName, int pin, string personNumber)
+        public Member(int id, string firstName, string lastName, int pin, int price, string personNumber)
         {
             this.Id = id;
             this.FirstName = firstName;
             this.SurName = lastName;
             this.Pin = pin;
+            this.Price = price;
             this.PersonNumber = personNumber;
         }
 
@@ -45,6 +46,7 @@ namespace GoaGaraget.Models
         [Required(ErrorMessage = "Please enter Sur name")]
         public string SurName { get; set; }
         public int Pin { get; set; }
+        public int Price { get; set; }
         [Required(ErrorMessage = "Please enter person number")]
         [ValidateUniquePersonNumber]
         [RegularExpression(@"[0-9]{1,6}-[0-9]{1,4}", ErrorMessage = "Please use correct format YYMMDD-SSSS")]

@@ -10,23 +10,41 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Make sure all is correct</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        Vehicle to checkout:
-        @Model.ParkedVehicle.RegNumber
+<div class="form-horizontal">
 
-        Checked in at 
-        @Model.ParkedVehicle.CheckinDate
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Checkout" class="btn btn-default" />
-            </div>
+    <h4>Welcome Mr/Mrs @Model.ParkedVehicle.Member.SurName</h4>
+
+    <hr />
+
+    <h4>Receipt</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    Vehicle to checkout:
+    <h4>@Model.ParkedVehicle.RegNumber</h4>
+
+    Checked in since
+    <h4>@Model.ParkedVehicle.CheckinDate</h4>
+    <hr />
+    <div>Visit summary @ViewBag.visitHours hours and @ViewBag.visitMinutes minutes</div>
+    <div>Your current rate is @Model.ParkedVehicle.Member.Price kr/hour</div>
+
+    <h4>Total price owed: @Model.Cost kr</h4>
+    <hr />
+
+    <div class="form-group">
+        @Html.ActionLink("Back to List", "Index")
+
+
+        <div class="btn-group">
+            <input type="submit" value="Checkout" class="btn btn-danger" />
+
+            <input type="button" value="Receipt" class="btn btn-success" />
         </div>
+
     </div>
+</div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
+
+

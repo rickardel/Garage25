@@ -24,8 +24,8 @@ namespace GoaGaraget.Migrations
             Models.VehicleType vt4 = new Models.VehicleType(4, "Truck", 5);
 
 
-            Models.Member M1 = new Models.Member(1, "Kalle", "Svensson", 1234, "010101-1234");
-            Models.Member M2 = new Models.Member(2, "Peter", "Stalefäldt", 1234, "990101-1234");
+            Models.Member M1 = new Models.Member(1, "Kalle", "Svensson", 1234, 20, "010101-1234");
+            Models.Member M2 = new Models.Member(2, "Peter", "Stalefäldt", 1234, 20, "990101-1234");
             context.Members.AddOrUpdate(M1);
             context.Members.AddOrUpdate(M2);
 
@@ -53,13 +53,24 @@ namespace GoaGaraget.Migrations
             }
             Models.ParkedVehicle pv1 = new Models.ParkedVehicle(M1, "ABC123", "röd", vt3, "Volvo", 4, DateTime.Now);
             Models.ParkedVehicle pv2 = new Models.ParkedVehicle(M2, "ABC124", "blue", vt1, "Lancia", 4, DateTime.Now);
-            Models.ParkedVehicle pv3 = new Models.ParkedVehicle(M2, "ABC125", "grön", vt4, "Scanida", 4, DateTime.Now);
-            pv1.Id = 1;
-            pv2.Id = 2;
-            pv3.Id = 3;
+            Models.ParkedVehicle pv3 = new Models.ParkedVehicle(M2, "ABC125", "grön", vt4, "Tesla", 8, DateTime.Now);
+            Models.ParkedVehicle pv4 = new Models.ParkedVehicle(M1, "ABC623", "röd", vt3, "Renault", 4, DateTime.Now);
+            Models.ParkedVehicle pv5 = new Models.ParkedVehicle(M1, "ABf124", "blue", vt1, "Lancia", 4, DateTime.Now);
+            Models.ParkedVehicle pv6 = new Models.ParkedVehicle(M2, "ABs125", "grön", vt4, "Mitsubishi", 8, DateTime.Now);
+            Models.ParkedVehicle pv7 = new Models.ParkedVehicle(M2, "ABj143", "röd", vt3, "Fiat", 6, DateTime.Now);
+            Models.ParkedVehicle pv8 = new Models.ParkedVehicle(M1, "gfC194", "blue", vt1, "Lancia", 4, DateTime.Now);
+            Models.ParkedVehicle pv9 = new Models.ParkedVehicle(M1, "tyC625", "grön", vt4, "Hyundai", 8, DateTime.Now);
+            pv1.Id = 1;pv2.Id = 2;pv3.Id = 3;pv4.Id = 4;pv5.Id = 5;
+            pv6.Id = 6;pv7.Id = 7;pv8.Id = 8;pv9.Id = 9;
             context.ParkedVehicles.AddOrUpdate(pv1);
             context.ParkedVehicles.AddOrUpdate(pv2);
             context.ParkedVehicles.AddOrUpdate(pv3);
+            context.ParkedVehicles.AddOrUpdate(pv4);
+            context.ParkedVehicles.AddOrUpdate(pv5);
+            context.ParkedVehicles.AddOrUpdate(pv6);
+            context.ParkedVehicles.AddOrUpdate(pv7);
+            context.ParkedVehicles.AddOrUpdate(pv8);
+            context.ParkedVehicles.AddOrUpdate(pv9);
 
         }
     }

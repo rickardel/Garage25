@@ -218,7 +218,11 @@ namespace GoaGaraget.Controllers
             {
                 return HttpNotFound();
             }
-            Receipt receipt = new Receipt(parkedVehicle);
+            Receipt receipt = new Receipt();
+            receipt.ParkedVehicle = parkedVehicle;
+            new Functionalities.Calculate().UpdateReceipt(receipt);
+            ViewBag.visitHours = (receipt.CheckoutAt - receipt.CheckinAt).Hours;
+            ViewBag.visitMinutes = (receipt.CheckoutAt - receipt.CheckinAt).Minutes;
             return View(receipt);
         }
 
@@ -230,7 +234,10 @@ namespace GoaGaraget.Controllers
             //ParkedVehicle parkedVehicle = db.ParkedVehicles.Find(id);
             //db.ParkedVehicles.Remove(parkedVehicle);
             ParkedVehicle parkedVehicle = db.ParkedVehicles.Find(id);
-            Receipt receipt = new Receipt(parkedVehicle);
+            Receipt receipt = new Receipt();
+            receipt.ParkedVehicle = parkedVehicle;
+            new Functionalities.Calculate().UpdateReceipt(receipt);
+            
             foreach (var ps in parkedVehicle.ParkingSpaces)
             {
                 ps.IsEmpty = true;
@@ -245,10 +252,6 @@ namespace GoaGaraget.Controllers
             }
             parkedVehicle.ParkingSpaces.Clear();
             //db.Entry(parkedVehicle).State = EntityState.Modified;
-            receipt.ParkedVehicle = parkedVehicle;
-            receipt.ParkedVehicleId = parkedVehicle.Id;
-            receipt.CheckoutAt = DateTime.Now;
-            receipt.CheckinAt = parkedVehicle.CheckinDate;
             db.Receipts.Add(receipt);
             db.SaveChanges();
             return RedirectToAction("Index");
