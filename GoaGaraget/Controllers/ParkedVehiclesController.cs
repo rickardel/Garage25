@@ -72,7 +72,17 @@ namespace GoaGaraget.Controllers
             {
                 ParkedVehicle parkedVehicle = db.ParkedVehicles.Find(id);
                 ParkingSpace[] parkingSpaces = db.ParkingSpaces.ToArray();
-                ParkingModel pm = new ParkingModel(parkedVehicle, parkingSpaces);
+                ParkingModel pm = new ParkingModel(parkedVehicle);
+
+                if (parkedVehicle.VehicleType.Id == 2)
+                {
+                    pm.AvailableParkingSpaces = new Functionalities.DoIt().GetAvailableMCParkingSpaces(parkingSpaces);
+
+                }
+                else
+                {
+                    pm.AvailableParkingSpaces = new Functionalities.DoIt().GetAvailableParkingSpaces(parkedVehicle.Size, parkingSpaces);
+                }
                 pm.ParkedVehicleId = (int)id;
                 ViewBag.ParkingSpaceId = new SelectList(pm.AvailableParkingSpaces, "Id", "Id");
                 //ViewBag.ParkedVehicleId = new SelectList(, "Id", "RegNumber", id);
@@ -87,7 +97,7 @@ namespace GoaGaraget.Controllers
                         return RedirectToActionPermanent("ParkingFull", "Home");
                 }
 
-                
+
             }
             return View("Index");
         }
@@ -103,16 +113,29 @@ namespace GoaGaraget.Controllers
                 ParkingSpace parkingSpace;
                 parkingModel.CreatedAt = DateTime.Now;
                 int i = 0;
-                do
+                if (parkedVehicle.VehicleType.Id == 2)
                 {
-                    parkingSpace = db.ParkingSpaces.Find(parkingModel.ParkingSpaceId + i);
+                    parkingSpace = db.ParkingSpaces.Find(parkingModel.ParkingSpaceId);
                     parkingSpace.IsEmpty = false;
+                    parkingSpace.IsMcParkingSpace = true;
                     parkedVehicle.ParkingSpaces.Add(parkingSpace);
                     db.Entry(parkingSpace).State = EntityState.Modified;
-                    parkingSpace.ParkedVehicles.Add(parkedVehicle);
-                    i++;
-                } while (i < parkedVehicle.Size);
-                parkedVehicle.CheckinDate = DateTime.Now;
+                    //parkingSpace.ParkedVehicles.Add(parkedVehicle);
+                    parkedVehicle.CheckinDate = DateTime.Now;
+                }
+                else
+                {
+                    do
+                    {
+                        parkingSpace = db.ParkingSpaces.Find(parkingModel.ParkingSpaceId + i);
+                        parkingSpace.IsEmpty = false;
+                        parkedVehicle.ParkingSpaces.Add(parkingSpace);
+                        db.Entry(parkingSpace).State = EntityState.Modified;
+                        parkingSpace.ParkedVehicles.Add(parkedVehicle);
+                        i++;
+                    } while (i < parkedVehicle.Size);
+                    parkedVehicle.CheckinDate = DateTime.Now;
+                }
                 db.Entry(parkedVehicle).State = EntityState.Modified;
                 db.Configuration.ValidateOnSaveEnabled = false;
                 db.SaveChanges();
@@ -129,7 +152,7 @@ namespace GoaGaraget.Controllers
             //ViewBag.VehicleTypeId = new SelectList(db.VehicleTypes, "Id", "Name");
 
             ParkedVehicleViewModel pvvm = new ParkedVehicleViewModel();
-            pvvm.Members = new SelectList(db.Members.ToList(), "Id", "PersonNumber");
+            pvvm.Members = new SelectList(db.Members.ToList(), "Id", "Firstname");
             pvvm.VehicleTypes = new SelectList(db.VehicleTypes.ToList(), "Id", "Name");
 
             return View(pvvm);
@@ -237,17 +260,21 @@ namespace GoaGaraget.Controllers
             Receipt receipt = new Receipt();
             receipt.ParkedVehicle = parkedVehicle;
             new Functionalities.Calculate().UpdateReceipt(receipt);
-            
+
+
             foreach (var ps in parkedVehicle.ParkingSpaces)
             {
-                ps.IsEmpty = true;
-
+                if (ps.ParkedVehicles.Count == 1)
+                {
+                    ps.IsEmpty = true;
+                    ps.IsMcParkingSpace = false;
+                }
                 ps.TotalIncome += receipt.Cost;
-                ps.VisitorCount++ ;
-                ps.AverageTime = 
+                ps.VisitorCount++;
+                ps.AverageTime =
                     TimeSpan.FromMinutes((int)Math
-                    .Round(((ps.AverageTime+(receipt.CheckoutAt-receipt.CheckinAt))
-                    .TotalMinutes)/ps.VisitorCount));
+                    .Round(((ps.AverageTime + (receipt.CheckoutAt - receipt.CheckinAt))
+                    .TotalMinutes) / ps.VisitorCount));
                 //db.Entry(ps).State = EntityState.Modified;
             }
             parkedVehicle.ParkingSpaces.Clear();

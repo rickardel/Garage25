@@ -22,12 +22,6 @@ public int ParkedVehicleId { get; set; }
         {
 
         }
-        public ParkingModel(ParkedVehicle parkedVehicle, ParkingSpace[] parkingSpaces)
-        {
-            Functionalities.DoIt doIt = new Functionalities.DoIt();
-            this.AvailableParkingSpaces = doIt.GetAvailableParkingSpaces(parkedVehicle.Size, parkingSpaces);
-            ParkedVehicle = parkedVehicle;
-        }
 
         public ParkingModel(ParkedVehicle parkedVehicle)
         {
