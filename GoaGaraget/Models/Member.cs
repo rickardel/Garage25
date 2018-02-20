@@ -23,7 +23,6 @@ namespace GoaGaraget.Models
         }
 
     }
-
     public class Member
     {
         public Member()
@@ -39,8 +38,6 @@ namespace GoaGaraget.Models
             this.PersonNumber = personNumber;
         }
 
-
-
         [Required]
         public int Id { get; set; }
         [Required(ErrorMessage = "Please enter First name")]
@@ -53,6 +50,6 @@ namespace GoaGaraget.Models
         [RegularExpression(@"[0-9]{1,6}-[0-9]{1,4}", ErrorMessage = "Please use correct format YYMMDD-SSSS")]
         public string PersonNumber { get; set; }
 
-        public ICollection<ParkedVehicle> ParkedVehicles { get; set; }
+        public virtual ICollection<ParkedVehicle> ParkedVehicles { get; set; }
     }
 }

@@ -19,6 +19,11 @@ namespace GoaGaraget.Controllers
         {
             return View(db.ParkedVehicles.ToList());
         }
+        public ActionResult SimpleIndex()
+        {
+            List<ParkedVehicleListModel> pvlm = new ParkedVehiclesListModel().Simplify(db.ParkedVehicles.ToList());
+            return View(pvlm);
+        }
 
         // GET: ParkedVehicles/Details/5
         public ActionResult Details(int? id)
@@ -76,8 +81,13 @@ namespace GoaGaraget.Controllers
 
                 if (parkedVehicle != null)
                 {
-                    return View(pm);
+                    if (pm.AvailableParkingSpaces.Count > 0)
+                        return View(pm);
+                    else
+                        return RedirectToActionPermanent("ParkingFull", "Home");
                 }
+
+                
             }
             return View("Index");
         }
@@ -133,7 +143,7 @@ namespace GoaGaraget.Controllers
         public ActionResult Create([Bind(Include = "MemberId,RegNumber,Color,VehicleTypeId,Brand,NumberOfWheels")] ParkedVehicleViewModel pvvm)
         {
             VehicleType vt = db.VehicleTypes.Single(v => v.Id == pvvm.VehicleTypeId);
-            ParkedVehicle parkedVehicle = new ParkedVehicle(pvvm.MemberId, pvvm.RegNumber, pvvm.Color, vt, pvvm.Brand, pvvm.NumberOfWheels, DateTime.Now);
+            ParkedVehicle parkedVehicle = new ParkedVehicle(pvvm.Member, pvvm.RegNumber, pvvm.Color, vt, pvvm.Brand, pvvm.NumberOfWheels, DateTime.Now);
             parkedVehicle.Member = db.Members.Single(m => m.Id == pvvm.MemberId);
             parkedVehicle.VehicleType = vt;
 

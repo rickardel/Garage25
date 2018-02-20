@@ -51,9 +51,12 @@ namespace GoaGaraget.Migrations
                 context.ParkingSpaces.AddOrUpdate(ps);
                 pss.Add(ps);
             }
-            Models.ParkedVehicle pv1 = new Models.ParkedVehicle(1, "ABC123", "röd", vt3, "Volvo", 4, DateTime.Now);
-            Models.ParkedVehicle pv2 = new Models.ParkedVehicle(2, "ABC124", "blue", vt1, "Lancia", 4, DateTime.Now);
-            Models.ParkedVehicle pv3 = new Models.ParkedVehicle(2, "ABC125", "grön", vt4, "Scanida", 4, DateTime.Now);
+            Models.ParkedVehicle pv1 = new Models.ParkedVehicle(M1, "ABC123", "röd", vt3, "Volvo", 4, DateTime.Now);
+            Models.ParkedVehicle pv2 = new Models.ParkedVehicle(M2, "ABC124", "blue", vt1, "Lancia", 4, DateTime.Now);
+            Models.ParkedVehicle pv3 = new Models.ParkedVehicle(M2, "ABC125", "grön", vt4, "Scanida", 4, DateTime.Now);
+            pv1.Id = 1;
+            pv2.Id = 2;
+            pv3.Id = 3;
             context.ParkedVehicles.AddOrUpdate(pv1);
             context.ParkedVehicles.AddOrUpdate(pv2);
             context.ParkedVehicles.AddOrUpdate(pv3);
