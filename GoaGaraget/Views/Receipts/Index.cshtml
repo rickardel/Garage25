@@ -23,6 +23,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.ParkedVehicle.Member)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ParkedVehicle.RegNumber)
             </th>
             <th>
@@ -40,23 +43,29 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    <strong>@Html.DisplayFor(modelItem => item.ParkedVehicle.RegNumber)</strong>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckinAt)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckoutAt)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Cost)
-                </td>
-                <td>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParkedVehicle.Member.FirstName)
+                @Html.DisplayFor(modelItem => item.ParkedVehicle.Member.SurName)
+
+            </td>
+
+            <td>
+                <strong>@Html.DisplayFor(modelItem => item.ParkedVehicle.RegNumber)</strong>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CheckinAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CheckoutAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cost)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
         }
     </tbody>
 </table>
