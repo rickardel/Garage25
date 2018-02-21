@@ -72,8 +72,8 @@ namespace GoaGaraget.Controllers
             {
                 ParkedVehicle parkedVehicle = db.ParkedVehicles.Find(id);
                 ParkingSpace[] parkingSpaces = db.ParkingSpaces.ToArray();
-                ParkingModel pm = new ParkingModel(parkedVehicle);
-
+                ParkingModel pm = new ParkingModel();
+                pm.ParkedVehicle = parkedVehicle;
                 if (parkedVehicle.VehicleType.Id == 2)
                 {
                     pm.AvailableParkingSpaces = new Functionalities.DoIt().GetAvailableMCParkingSpaces(parkingSpaces);
@@ -94,7 +94,7 @@ namespace GoaGaraget.Controllers
                     if (pm.AvailableParkingSpaces.Count > 0)
                         return View(pm);
                     else
-                        return RedirectToActionPermanent("ParkingFull", "Home");
+                        return View(pm); //RedirectToActionPermanent("ParkingFull", "Home");
                 }
 
 

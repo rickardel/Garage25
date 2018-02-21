@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using GoaGaraget.DataAccessLayer;
-
+using System.Web.Mvc;
 
 namespace GoaGaraget.Models
 {
@@ -29,6 +29,7 @@ namespace GoaGaraget.Models
 
 
     //public enum VehicleType { Car, Truck, Lorry, Motorcycle, Boat, Airplane }
+    [OutputCacheAttribute(VaryByParam ="*",Duration =0,NoStore =true)]
     public class ParkedVehicle
     {
         [Required(ErrorMessage = "Id is required")]
